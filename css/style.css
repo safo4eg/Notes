@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.note-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+/* NOTE */
+
+.note {
+    padding: 10px;
+}
+
+.note ul {
+    list-style-type: none;
+}
+
+.note ul li {
+    margin-left: 5px;
+    font-size: 16px;
+}
+
+.note ul li:before {
+    content: "\2714";
+    margin-right: 7px;
+
+    font-size: 20px;
+    color: #c9c9c9;
+    transition-duration: .3s;
+}
+
+.note ul li:hover {
+    cursor: pointer;
+}
+
+.note ul li:hover::before {
+    color: #1e3859;
+    cursor: pointer;
+}
+

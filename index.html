@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="js/vue.js"></script>
+    <script defer src="js/main.js"></script>
+    <title>Notes</title>
+</head>
+<body>
+  <div id="app">
+      <div class="note-wrapper">
+          <note v-for="(note, index) in notes" :key="index" :input="note"></note>
+      </div>
+  </div>
+</body>
+</html>
