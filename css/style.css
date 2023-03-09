@@ -41,7 +41,6 @@
 }
 
 .note ul li:hover::before {
-    color: #1e3859;
     cursor: pointer;
     font-size: 32px;
 }
