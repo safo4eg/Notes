@@ -25,8 +25,15 @@ templates.then(array => {
             parseInput() {
                 let data = this.input;
                 this.title = data.title;
-                this.notices = data.messages;
+                this.notices = data.notices;
                 this.isDone = data.isDone;
+                this.id = data.id;
+            },
+
+            completeNotice(index) {
+                this.notices.forEach((notice, i) => {
+                   if(i === index) notice.isDone = !notice.isDone;
+                });
             }
         }
     }
@@ -37,20 +44,21 @@ templates.then(array => {
         data: {
             notes: [
                 {
+                    id: 1,
                     title: 'Заметка 1',
-                    messages: [
+                    notices: [
                         {
                             message: 'Задача 1',
                             isDone: false,
                         },
 
                         {
-                            message: 'Задача 1',
+                            message: 'Задача 2',
                             isDone: false,
                         },
 
                         {
-                            message: 'Задача 1',
+                            message: 'Задача 3',
                             isDone: false,
                         }
                     ],

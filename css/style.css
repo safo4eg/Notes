@@ -32,6 +32,10 @@
     transition-duration: .3s;
 }
 
+.note ul li.done:before{
+    color: #1e3859;
+}
+
 .note ul li:hover {
     cursor: pointer;
 }
@@ -39,5 +43,6 @@
 .note ul li:hover::before {
     color: #1e3859;
     cursor: pointer;
+    font-size: 32px;
 }
 

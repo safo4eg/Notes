@@ -2,6 +2,9 @@
     {{parseInput()}}
     <h3>{{title}}</h3>
     <ul>
-        <li v-for="(notice, index) in notices" ></li>
+        <li v-for="(notice, index) in notices"
+            :class="{done: notice.isDone}"
+            @click="completeNotice(index)"
+        >{{notice.message}}</li>
     </ul>
 </div>
