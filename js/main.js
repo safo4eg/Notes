@@ -28,6 +28,16 @@ templates.then(array => {
             }
         },
 
+        computed: {
+          doneNoticesAmount() {
+              let amount = 0;
+              this.notices.forEach(elem => {
+                  if(elem.isDone) amount++;
+              });
+              return amount;
+          },
+        },
+
         methods: {
             parseInput() {
                 let data = this.input;
@@ -58,9 +68,23 @@ templates.then(array => {
                 this.$emit('change-is-done', isDone, this.id);
             },
 
+            leftColumnLock() {
+                this.$emit('left-column-lock', this.id, this.notices);
+            },
+
+            leftColumnUnlock() {
+                this.$emit('left-column-unlock')
+            },
+
             clickToNotice(index) {
                 this.completeNotice(index);
+
                 if(this.middle < 5) this.noteIsDone();
+                else if(this.doneNoticesAmount === 2) this.leftColumnLock();
+                else if(this.doneNoticesAmount === 3) {
+                    this.leftColumnUnlock();
+                    this.noteIsDone();
+                };
             }
 
         },
@@ -71,6 +95,8 @@ templates.then(array => {
         el: '#app',
         data: {
             notes: [],
+            lasLockedNote: {},
+            leftColumnIsLock: false,
         },
 
         computed: {
@@ -125,6 +151,22 @@ templates.then(array => {
                     }
                 });
                 return amount;
+            },
+
+            leftColumnLock(id, notices) {
+                this.leftColumnIsLock = !this.leftColumnIsLock;
+                this.lasLockedNote.id = id;
+                this.lasLockedNote.notices = notices;
+            },
+
+            leftColumnUnlock() {
+                this.leftColumnIsLock = !this.leftColumnIsLock;
+                this.notes.forEach(elem => {
+                   if(elem.id === this.lasLockedNote.id) {
+                       elem.notices = this.lasLockedNote.notices;
+                       elem.isDone = 2;
+                   }
+                });
             }
         }
     });

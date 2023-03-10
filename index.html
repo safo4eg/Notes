@@ -10,18 +10,21 @@
 <body>
   <div id="app">
       <div class="structure">
-              <div class="column">
-                  <p>Новое дело ({{columnLeftAmount}})</p>
+              <div class="column left">
+                  <p>Дела ({{columnLeftAmount}})</p>
                   <div class="note-wrapper">
                       <template v-for="(note, index) in notes">
                           <note v-if="note.isDone === 1"
                                 :input="note"
                                 :middle="columnMiddleAmount"
                                 @change-is-done="changeIsDone"
+                                @left-column-lock="leftColumnLock"
                           ></note>
                       </template>
                       <span v-show="columnLeftAmount < 3" class="add" @click="addNote"></span>
                   </div>
+
+                  <div class="modal" :class="{active: leftColumnIsLock}"></div>
               </div>
 
               <div class="column">
@@ -32,6 +35,7 @@
                                 :input="note"
                                 :middle="columnMiddleAmount"
                                 @change-is-done="changeIsDone"
+                                @left-column-unlock="leftColumnUnlock"
                           ></note>
                       </template>
                   </div>
