@@ -10,7 +10,22 @@
 <body>
   <div id="app">
       <div class="note-wrapper">
-          <note v-for="(note, index) in notes" :key="index" :input="note"></note>
+
+          <template v-for="(note, index) in notes" :key="index">
+
+              <div v-if="note.isDone === 1" class="left">
+                  <note :input="note"></note>
+              </div>
+
+              <div v-else-if="note.isDone === 2" class="middle">
+                  <note :input="note"></note>
+              </div>
+
+              <div v-else-if="note.isDone === 3" class="right" @change-is-done="changeIsDone">
+                  <note :input="note"></note>
+              </div>
+
+          </template>
       </div>
   </div>
 </body>

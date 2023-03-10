@@ -45,11 +45,12 @@ templates.then(array => {
                    if(elem.isDone) amountNoticesDone++;
                 });
 
-                if(amountNoticesDone === amountNotices) return  '= 100%';
-                else {
-                    if(amountNoticesDone / amountNotices >= 0.5) return '>= 50%';
-                    return '< 50%'
-                }
+                let isDone = 1;
+                if(amountNoticesDone === amountNotices) isDone = 3;
+                else if(amountNoticesDone / amountNotices >= 0.5) isDone = 2;
+                else isDone = 1;
+
+                this.$emit('change-is-done', isDone, this.id);
             }
         }
     }
@@ -78,6 +79,8 @@ templates.then(array => {
                             isDone: false,
                         }
                     ],
+
+                    isDone: 1,
                 },
 
                 {
@@ -99,8 +102,16 @@ templates.then(array => {
                             isDone: false,
                         }
                     ],
+
+                    isDone: 2,
                 },
             ],
+        },
+
+        methods: {
+            changeIsDone(isDone, id) {
+
+            }
         }
     });
 });
