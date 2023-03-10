@@ -9,24 +9,47 @@
 </head>
 <body>
   <div id="app">
-      <div class="note-wrapper">
-
-          <template v-for="(note, index) in notes" :key="index">
-
-              <div v-if="note.isDone === 1" class="left">
-                  <note :input="note"></note>
+      <div class="structure">
+              <div class="column">
+                  <p>Новое дело ({{columnLeftAmount}})</p>
+                  <div class="note-wrapper">
+                      <template v-for="(note, index) in notes">
+                          <note v-if="note.isDone === 1"
+                                :input="note"
+                                :middle="columnMiddleAmount"
+                                @change-is-done="changeIsDone"
+                          ></note>
+                      </template>
+                      <span v-show="columnLeftAmount < 3" class="add" @click="addNote"></span>
+                  </div>
               </div>
 
-              <div v-else-if="note.isDone === 2" class="middle">
-                  <note :input="note"></note>
+              <div class="column">
+                  <p>Еще чуть-чуть ({{columnMiddleAmount}})</p>
+                  <div class="note-wrapper">
+                      <template v-for="(note, index) in notes">
+                          <note v-if="note.isDone === 2"
+                                :input="note"
+                                :middle="columnMiddleAmount"
+                                @change-is-done="changeIsDone"
+                          ></note>
+                      </template>
+                  </div>
               </div>
 
-              <div v-else-if="note.isDone === 3" class="right" @change-is-done="changeIsDone">
-                  <note :input="note"></note>
+              <div class="column">
+                  <p>Готовые дела ({{columnRightAmount}})</p>
+                  <div class="note-wrapper">
+                      <template v-for="(note, index) in notes">
+                          <note v-if="note.isDone === 3"
+                                :input="note"
+                                :middle="columnMiddleAmount"
+                                @change-is-done="changeIsDone"
+                          ></note>
+                      </template>
+                  </div>
               </div>
-
-          </template>
-      </div>
+      </div> <!-- structure -->
   </div>
 </body>
 </html>

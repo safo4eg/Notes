@@ -1,12 +1,10 @@
 <div class="note">
     {{parseInput()}}
-    <h3>{{title}}</h3>
+    <h3 class="title">{{title}}</h3>
     <ul>
         <li v-for="(notice, index) in notices"
             :class="{done: notice.isDone}"
-            @click="completeNotice(index)"
+            @click="clickToNotice(index)"
         >{{notice.message}}</li>
     </ul>
-
-    <p>Выполнено: {{noteIsDone}}</p>
 </div>

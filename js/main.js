@@ -11,8 +11,15 @@ templates.then(array => {
             input: {
                 type: Object,
                 required: true
+            },
+
+            middle: {
+                type: Number,
+                required: true
             }
         },
+
+        emits: ['change-is-done'],
 
         data() {
             return {
@@ -35,14 +42,12 @@ templates.then(array => {
                 });
             },
 
-        },
-
-        computed: {
             noteIsDone() {
                 let amountNotices = this.notices.length;
                 let amountNoticesDone = 0;
+
                 this.notices.forEach(elem => {
-                   if(elem.isDone) amountNoticesDone++;
+                    if(elem.isDone) amountNoticesDone++;
                 });
 
                 let isDone = 1;
@@ -51,66 +56,75 @@ templates.then(array => {
                 else isDone = 1;
 
                 this.$emit('change-is-done', isDone, this.id);
+            },
+
+            clickToNotice(index) {
+                this.completeNotice(index);
+                if(this.middle < 5) this.noteIsDone();
             }
-        }
+
+        },
     }
 
     Vue.component('note', noteBody);
     let app = new Vue({
         el: '#app',
         data: {
-            notes: [
-                {
-                    id: 1,
-                    title: 'Заметка 1',
-                    notices: [
-                        {
-                            message: 'Задача 1',
-                            isDone: false,
-                        },
+            notes: [],
+        },
 
-                        {
-                            message: 'Задача 2',
-                            isDone: false,
-                        },
+        computed: {
+            columnLeftAmount() {
+                return this.countNotes('left');
+            },
 
-                        {
-                            message: 'Задача 3',
-                            isDone: false,
-                        }
-                    ],
+            columnMiddleAmount() {
+                return this.countNotes('middle');
+            },
 
-                    isDone: 1,
-                },
-
-                {
-                    id: 1,
-                    title: 'Заметка 2',
-                    notices: [
-                        {
-                            message: 'Задача 1',
-                            isDone: false,
-                        },
-
-                        {
-                            message: 'Задача 2',
-                            isDone: false,
-                        },
-
-                        {
-                            message: 'Задача 3',
-                            isDone: false,
-                        }
-                    ],
-
-                    isDone: 2,
-                },
-            ],
+            columnRightAmount() {
+                return this.countNotes('right');
+            }
         },
 
         methods: {
             changeIsDone(isDone, id) {
+                this.notes.forEach(elem => {
+                   if(elem.id === id) elem.isDone = isDone;
+                });
+            },
 
+            addNote() {
+                let lastId = 0;
+                this.notes.forEach(elem => {lastId = elem.id});
+
+                let obj = {
+                    id: ++lastId,
+                    title: `Заметка ${lastId}`,
+                    notices: [],
+                    isDone: 1
+                };
+
+                for(let i = 0; i < 3; i++) {
+                    let notice = {message: `Задача ${i + 1}`, isDone: false}
+                    obj.notices.push(notice);
+                }
+
+                this.notes.push(obj);
+            }, // addNote
+
+            countNotes(position) {
+                let amount = 0;
+                this.notes.forEach(elem => {
+                    if(position === 'left') {
+                        if(elem.isDone === 1) amount++;
+                    } else if(position === 'middle') {
+                        if(elem.isDone === 2) amount++;
+                    } else if(position === 'right') {
+                        if(elem.isDone === 3) amount++;
+                    }
+                });
+                return amount;
             }
         }
     });
