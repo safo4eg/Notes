@@ -26,7 +26,6 @@ templates.then(array => {
                 let data = this.input;
                 this.title = data.title;
                 this.notices = data.notices;
-                this.isDone = data.isDone;
                 this.id = data.id;
             },
 
@@ -34,6 +33,23 @@ templates.then(array => {
                 this.notices.forEach((notice, i) => {
                    if(i === index) notice.isDone = !notice.isDone;
                 });
+            },
+
+        },
+
+        computed: {
+            noteIsDone() {
+                let amountNotices = this.notices.length;
+                let amountNoticesDone = 0;
+                this.notices.forEach(elem => {
+                   if(elem.isDone) amountNoticesDone++;
+                });
+
+                if(amountNoticesDone === amountNotices) return  '= 100%';
+                else {
+                    if(amountNoticesDone / amountNotices >= 0.5) return '>= 50%';
+                    return '< 50%'
+                }
             }
         }
     }
@@ -62,7 +78,27 @@ templates.then(array => {
                             isDone: false,
                         }
                     ],
-                    isDone: false
+                },
+
+                {
+                    id: 1,
+                    title: 'Заметка 2',
+                    notices: [
+                        {
+                            message: 'Задача 1',
+                            isDone: false,
+                        },
+
+                        {
+                            message: 'Задача 2',
+                            isDone: false,
+                        },
+
+                        {
+                            message: 'Задача 3',
+                            isDone: false,
+                        }
+                    ],
                 },
             ],
         }
