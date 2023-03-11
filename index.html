@@ -17,6 +17,7 @@
                           <note v-if="note.isDone === 1"
                                 :input="note"
                                 :middle="columnMiddleAmount"
+                                :locked="lastLockedNote"
                                 @change-is-done="changeIsDone"
                                 @left-column-lock="leftColumnLock"
                           ></note>
@@ -34,6 +35,7 @@
                           <note v-if="note.isDone === 2"
                                 :input="note"
                                 :middle="columnMiddleAmount"
+                                :locked="lastLockedNote"
                                 @change-is-done="changeIsDone"
                                 @left-column-unlock="leftColumnUnlock"
                           ></note>
@@ -48,6 +50,7 @@
                           <note v-if="note.isDone === 3"
                                 :input="note"
                                 :middle="columnMiddleAmount"
+                                :locked="lastLockedNote"
                                 @change-is-done="changeIsDone"
                           ></note>
                       </template>

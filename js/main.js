@@ -16,6 +16,11 @@ templates.then(array => {
             middle: {
                 type: Number,
                 required: true
+            },
+
+            locked: {
+                type: Object,
+                required: false,
             }
         },
 
@@ -29,13 +34,19 @@ templates.then(array => {
         },
 
         computed: {
-          doneNoticesAmount() {
-              let amount = 0;
-              this.notices.forEach(elem => {
-                  if(elem.isDone) amount++;
-              });
-              return amount;
-          },
+            lastLockedStatus() {
+                if(Object.keys(this.locked).length !== 0) {
+                    return this.locked.isDone;
+                } else return 0;
+            },
+
+            doneNoticesAmount() {
+                let amount = 0;
+                this.notices.forEach(elem => {
+                    if(elem.isDone) amount++;
+                });
+                return amount;
+            },
         },
 
         methods: {
@@ -44,6 +55,7 @@ templates.then(array => {
                 this.title = data.title;
                 this.notices = data.notices;
                 this.id = data.id;
+                this.isDone = data.isDone;
             },
 
             completeNotice(index) {
@@ -80,11 +92,13 @@ templates.then(array => {
                 this.completeNotice(index);
 
                 if(this.middle < 5) this.noteIsDone();
-                else if(this.doneNoticesAmount === 2) this.leftColumnLock();
-                else if(this.doneNoticesAmount === 3) {
+                else if(this.doneNoticesAmount === 2 && this.isDone === 1) this.leftColumnLock();
+                else if((this.doneNoticesAmount === 3 || this.doneNoticesAmount === 1 ) && this.isDone === 2 && this.lastLockedStatus === 1) {
                     this.leftColumnUnlock();
                     this.noteIsDone();
-                };
+                } else {
+                    this.noteIsDone();
+                }
             }
 
         },
@@ -95,7 +109,7 @@ templates.then(array => {
         el: '#app',
         data: {
             notes: [],
-            lasLockedNote: {},
+            lastLockedNote: {},
             leftColumnIsLock: false,
         },
 
@@ -154,17 +168,21 @@ templates.then(array => {
             },
 
             leftColumnLock(id, notices) {
+                console.log('leftColumnLock');
                 this.leftColumnIsLock = !this.leftColumnIsLock;
-                this.lasLockedNote.id = id;
-                this.lasLockedNote.notices = notices;
+                this.lastLockedNote.id = id;
+                this.lastLockedNote.notices = notices;
+                this.lastLockedNote.isDone = 1;
             },
 
             leftColumnUnlock() {
-                this.leftColumnIsLock = !this.leftColumnIsLock;
+                console.log('leftColumnUnlock');
+                this.leftColumnIsLock = false;
                 this.notes.forEach(elem => {
-                   if(elem.id === this.lasLockedNote.id) {
-                       elem.notices = this.lasLockedNote.notices;
+                   if(elem.id === this.lastLockedNote.id) {
+                       elem.notices = this.lastLockedNote.notices;
                        elem.isDone = 2;
+                       this.lastLockedNote.isDone = elem.isDone;
                    }
                 });
             }
