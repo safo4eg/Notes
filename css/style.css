@@ -72,6 +72,10 @@
     padding: 10px;
 }
 
+.note .title:hover {
+    cursor: pointer;
+}
+
 .note ul {
     list-style-type: none;
 }
@@ -82,7 +86,7 @@
 }
 
 .note ul li:before {
-    content: "\2714";
+    content: "\2744";
     margin-right: 7px;
 
     font-size: 20px;

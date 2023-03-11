@@ -1,10 +1,17 @@
 <div class="note">
     {{parseInput()}}
-    <h3 class="title">{{title}}</h3>
-    <ul>
-        <li v-for="(notice, index) in notices"
-            :class="{done: notice.isDone}"
-            @click="clickToNotice(index)"
-        >{{notice.message}}</li>
-    </ul>
+    <template v-if="!isEdit">
+        <h3 class="title" @click="edit(id)">{{title}}</h3>
+        <ul>
+            <li v-for="(notice, index) in notices"
+                :class="{done: notice.isDone}"
+                @click="clickToNotice(index)"
+            >{{notice.message}}</li>
+        </ul>
+        <p v-if="time">{{time}}</p>
+    </template>
+
+    <template v-else>
+        <note-edit :title="title" :notices="notices" :id="id" @save="saveChanges" @cancel="cancelChanges"></note-edit>
+    </template>
 </div>

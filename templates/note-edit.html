@@ -1,0 +1,13 @@
+<div class="note-edit">
+    <input type="text" v-model="title">
+    <template v-for="(notice, index) in notices">
+        <input type="text" v-model="notice.message">
+    </template>
+    <div class="buttons">
+        <button v-show="noticesAmount < 5" @click="add">добавить</button>
+        <button @click="save">сохранить</button>
+        <button @click="cancel">отменить</button>
+    </div>
+
+    <p>{{id}}</p>
+</div>

@@ -1,8 +1,10 @@
 let noteTemplate = 'templates/note.html';
+let noteEditTemplate = 'templates/note-edit.html';
 
-let templates = getTemplates(noteTemplate);
+let templates = getTemplates(noteTemplate, noteEditTemplate);
 templates.then(array => {
     noteTemplate = array[0];
+    noteEditTemplate = array[1];
 
     let noteBody = {
         template: noteTemplate,
@@ -24,7 +26,7 @@ templates.then(array => {
             }
         },
 
-        emits: ['change-is-done'],
+        emits: ['change-is-done', 'left-column-unlock', 'left-column-lock', 'edit', 'save'],
 
         data() {
             return {
@@ -45,7 +47,12 @@ templates.then(array => {
                 this.notices.forEach(elem => {
                     if(elem.isDone) amount++;
                 });
-                return amount;
+
+                let percent = amount / this.notices.length;
+
+                if(percent < 0.5) return 1;
+                else if(percent >= 0.5 && percent < 1) return 2;
+                else if(percent === 1) return 3;
             },
         },
 
@@ -56,6 +63,8 @@ templates.then(array => {
                 this.notices = data.notices;
                 this.id = data.id;
                 this.isDone = data.isDone;
+                this.isEdit = data.isEdit;
+                this.time = data.time;
             },
 
             completeNotice(index) {
@@ -67,6 +76,7 @@ templates.then(array => {
             noteIsDone() {
                 let amountNotices = this.notices.length;
                 let amountNoticesDone = 0;
+                let time = 0;
 
                 this.notices.forEach(elem => {
                     if(elem.isDone) amountNoticesDone++;
@@ -77,7 +87,9 @@ templates.then(array => {
                 else if(amountNoticesDone / amountNotices >= 0.5) isDone = 2;
                 else isDone = 1;
 
-                this.$emit('change-is-done', isDone, this.id);
+                if(this.doneNoticesAmount === 3) time = new Date();
+
+                this.$emit('change-is-done', isDone, this.id, time);
             },
 
             leftColumnLock() {
@@ -99,12 +111,77 @@ templates.then(array => {
                 } else {
                     this.noteIsDone();
                 }
+            },
+
+            edit(id) {
+                this.$emit('edit', id);
+            },
+
+            saveChanges(id, title, notices) {
+                this.$emit('save', id, title, notices);
+            },
+
+            cancelChanges(id) {
+                this.$emit('cancel', id);
             }
 
         },
     }
 
+    let noteEditBody = {
+        template: noteEditTemplate,
+        props: {
+            title: {
+                type: String,
+                required: true,
+            },
+
+            notices: {
+                type: Array,
+                required: true,
+            },
+
+            id: {
+                type: Number,
+                required: true,
+            }
+        },
+
+        emits: ['save'],
+
+        data() {
+            return {
+                changes: {
+                    title: this.title,
+                    notices: this.notices,
+                },
+            }
+        },
+
+        computed: {
+            noticesAmount() {
+                return this.notices.length;
+            }
+        },
+
+        methods: {
+            add() {
+                let numberNotice = this.noticesAmount;
+                this.notices.push({message: `Задача ${++numberNotice}`, isDone: false})
+            },
+
+            save() {
+                this.$emit('save', this.id, this.title, this.notices);
+            },
+
+            cancel() {
+                this.$emit('cancel', this.id);
+            }
+        }
+    }
+
     Vue.component('note', noteBody);
+    Vue.component('note-edit', noteEditBody);
     let app = new Vue({
         el: '#app',
         data: {
@@ -128,9 +205,12 @@ templates.then(array => {
         },
 
         methods: {
-            changeIsDone(isDone, id) {
+            changeIsDone(isDone, id, time) {
                 this.notes.forEach(elem => {
-                   if(elem.id === id) elem.isDone = isDone;
+                   if(elem.id === id) {
+                       elem.isDone = isDone;
+                       if(time !== 0) elem.time = time;
+                   }
                 });
             },
 
@@ -142,7 +222,9 @@ templates.then(array => {
                     id: ++lastId,
                     title: `Заметка ${lastId}`,
                     notices: [],
-                    isDone: 1
+                    isDone: 1,
+                    isEdit: false,
+                    time: false,
                 };
 
                 for(let i = 0; i < 3; i++) {
@@ -152,6 +234,28 @@ templates.then(array => {
 
                 this.notes.push(obj);
             }, // addNote
+
+            editNote(id) {
+                this.notes.forEach(elem => {
+                   if(elem.id === id) elem.isEdit = !elem.isEdit;
+                });
+            },
+
+            saveChanges(id, title, notices) {
+                this.notes.forEach(elem => {
+                    if(elem.id === id) {
+                        elem.title = title;
+                        elem.notices = notices;
+                        elem.isEdit = false;
+                    }
+                });
+            },
+
+            cancelChanges(id) {
+                this.notes.forEach(elem => {
+                    if(elem.id === id) elem.isEdit = !elem.isEdit;
+                });
+            },
 
             countNotes(position) {
                 let amount = 0;

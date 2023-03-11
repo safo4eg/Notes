@@ -20,6 +20,9 @@
                                 :locked="lastLockedNote"
                                 @change-is-done="changeIsDone"
                                 @left-column-lock="leftColumnLock"
+                                @edit="editNote"
+                                @save="saveChanges"
+                                @cancel="cancelChanges"
                           ></note>
                       </template>
                       <span v-show="columnLeftAmount < 3" class="add" @click="addNote"></span>
@@ -38,6 +41,9 @@
                                 :locked="lastLockedNote"
                                 @change-is-done="changeIsDone"
                                 @left-column-unlock="leftColumnUnlock"
+                                @edit="editNote"
+                                @save="saveChanges"
+                                @cancel="cancelChanges"
                           ></note>
                       </template>
                   </div>
@@ -51,7 +57,6 @@
                                 :input="note"
                                 :middle="columnMiddleAmount"
                                 :locked="lastLockedNote"
-                                @change-is-done="changeIsDone"
                           ></note>
                       </template>
                   </div>
