@@ -37,6 +37,7 @@
                       <template v-for="(note, index) in notes">
                           <note v-if="note.isDone === 2"
                                 :input="note"
+                                :left="columnLeftAmount"
                                 :middle="columnMiddleAmount"
                                 :locked="lastLockedNote"
                                 @change-is-done="changeIsDone"

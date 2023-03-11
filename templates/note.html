@@ -4,7 +4,7 @@
         <h3 class="title" @click="edit(id)">{{title}}</h3>
         <ul>
             <li v-for="(notice, index) in notices"
-                :class="{done: notice.isDone}"
+                :class="{done: notice.isDone, complete: isDone === 3}"
                 @click="clickToNotice(index)"
             >{{notice.message}}</li>
         </ul>

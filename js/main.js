@@ -15,6 +15,11 @@ templates.then(array => {
                 required: true
             },
 
+            left: {
+                type: Number,
+                required: false,
+            },
+
             middle: {
                 type: Number,
                 required: true
@@ -103,14 +108,13 @@ templates.then(array => {
             clickToNotice(index) {
                 this.completeNotice(index);
 
-                if(this.middle < 5) this.noteIsDone();
+                if((this.doneNoticesAmount === 1 && this.isDone === 2 && this.left === 3) || this.isDone === 3) this.completeNotice(index);
+                else if(this.middle < 5) this.noteIsDone();
                 else if(this.doneNoticesAmount === 2 && this.isDone === 1) this.leftColumnLock();
                 else if((this.doneNoticesAmount === 3 || this.doneNoticesAmount === 1 ) && this.isDone === 2 && this.lastLockedStatus === 1) {
                     this.leftColumnUnlock();
                     this.noteIsDone();
-                } else {
-                    this.noteIsDone();
-                }
+                } else this.noteIsDone();
             },
 
             edit(id) {
