@@ -114,3 +114,8 @@
 .note ul li.complete:hover {
     cursor: default;
 }
+
+.note .time {
+    margin-top: 5px;
+    font-size: 14px;
+}

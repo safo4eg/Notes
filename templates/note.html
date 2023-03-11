@@ -8,7 +8,7 @@
                 @click="clickToNotice(index)"
             >{{notice.message}}</li>
         </ul>
-        <p v-if="time">{{time}}</p>
+        <p class="time" v-if="time">{{time}}</p>
     </template>
 
     <template v-else>

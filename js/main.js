@@ -92,7 +92,14 @@ templates.then(array => {
                 else if(amountNoticesDone / amountNotices >= 0.5) isDone = 2;
                 else isDone = 1;
 
-                if(this.doneNoticesAmount === 3) time = new Date();
+                if(this.doneNoticesAmount === 3) {
+                    let date = new Date()
+                    let year = date.getFullYear();
+                    let month = date.getMonth();
+                    let day = date.getDate();
+                    let hoursAndMinutes = `${date.getHours()}:${date.getMinutes()}`;
+                    time = `${year}-${month}-${day} ${hoursAndMinutes}`;
+                };
 
                 this.$emit('change-is-done', isDone, this.id, time);
             },
@@ -189,7 +196,7 @@ templates.then(array => {
     let app = new Vue({
         el: '#app',
         data: {
-            notes: [],
+            bufferNotes: [],
             lastLockedNote: {},
             leftColumnIsLock: false,
         },
@@ -205,10 +212,25 @@ templates.then(array => {
 
             columnRightAmount() {
                 return this.countNotes('right');
+            },
+
+            notes() {
+                this.getFromStorage();
+                return this.bufferNotes;
             }
         },
 
         methods: {
+
+            setToStorage() {
+                localStorage.setItem('notes', JSON.stringify(this.notes));
+            },
+
+            getFromStorage() {
+                let notes = JSON.parse(localStorage.getItem('notes'));
+                this.bufferNotes = notes;
+            },
+
             changeIsDone(isDone, id, time) {
                 this.notes.forEach(elem => {
                    if(elem.id === id) {
@@ -237,6 +259,7 @@ templates.then(array => {
                 }
 
                 this.notes.push(obj);
+                this.setToStorage();
             }, // addNote
 
             editNote(id) {

@@ -32,7 +32,7 @@
               </div>
 
               <div class="column">
-                  <p>чуть-чуть ({{columnMiddleAmount}})</p>
+                  <p>Осталось немножко ({{columnMiddleAmount}})</p>
                   <div class="note-wrapper">
                       <template v-for="(note, index) in notes">
                           <note v-if="note.isDone === 2"
@@ -42,9 +42,6 @@
                                 :locked="lastLockedNote"
                                 @change-is-done="changeIsDone"
                                 @left-column-unlock="leftColumnUnlock"
-                                @edit="editNote"
-                                @save="saveChanges"
-                                @cancel="cancelChanges"
                           ></note>
                       </template>
                   </div>
@@ -63,6 +60,7 @@
                   </div>
               </div>
       </div> <!-- structure -->
+      {{setToStorage()}}
   </div>
 </body>
 </html>
