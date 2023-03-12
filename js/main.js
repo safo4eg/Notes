@@ -196,9 +196,13 @@ templates.then(array => {
     let app = new Vue({
         el: '#app',
         data: {
-            bufferNotes: [],
+            notes: [],
             lastLockedNote: {},
             leftColumnIsLock: false,
+        },
+
+        mounted() {
+            this.getFromStorage();
         },
 
         computed: {
@@ -214,21 +218,17 @@ templates.then(array => {
                 return this.countNotes('right');
             },
 
-            notes() {
-                this.getFromStorage();
-                return this.bufferNotes;
-            }
         },
 
         methods: {
 
             setToStorage() {
-                localStorage.setItem('notes', JSON.stringify(this.notes));
+                if(this.notes.length !== 0) localStorage.setItem('notes', JSON.stringify(this.notes));
             },
 
             getFromStorage() {
                 let notes = JSON.parse(localStorage.getItem('notes'));
-                this.bufferNotes = notes;
+                if(notes.length !== 0) this.notes = notes;
             },
 
             changeIsDone(isDone, id, time) {
@@ -259,7 +259,6 @@ templates.then(array => {
                 }
 
                 this.notes.push(obj);
-                this.setToStorage();
             }, // addNote
 
             editNote(id) {

@@ -86,7 +86,7 @@
 }
 
 .note ul li:before {
-    content: "\2744";
+    content: "\2714";
     margin-right: 7px;
 
     font-size: 20px;
